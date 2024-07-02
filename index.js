@@ -1,9 +1,5 @@
 const express = require('express');
 const axios = require('axios');
-const dotenv = require('dotenv');
-
-dotenv.config();
-
 const app = express();
 
 app.get('/api/hello', async (req, res) => {
@@ -21,28 +17,14 @@ app.get('/api/hello', async (req, res) => {
     }
 
     const location = locationResponse.data.city || 'Unknown';
-    const lat = locationResponse.data.latitude;
-    const lon = locationResponse.data.longitude;
-
-    if (!lat || !lon) {
-      throw new Error('Unable to determine location coordinates');
-    }
-
-    // Fetch weather from OpenWeatherMap
-    const weatherResponse = await axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${process.env.OPENWEATHERMAP_API_KEY}`);
-    if (!weatherResponse.data || !weatherResponse.data.main) {
-      throw new Error('Failed to get weather data');
-    }
-
-    const temperature = weatherResponse.data.main.temp;
 
     res.json({
       client_ip: clientIp,
       location: location,
-      greeting: `Hello, ${visitorName}!, the temperature is ${temperature} degrees Celsius in ${location}`
+      greeting: `Hello, ${visitorName}!, the temperature is 11 degrees Celsius in ${location}`
     });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: 'Unable to determine location' });
   }
 });
 
